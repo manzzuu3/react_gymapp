@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { useApp } from '../context/AppContext';
 import { router } from 'expo-router';
-import { Sparkles, Check, ChevronRight, X } from 'lucide-react-native';
+import { Sparkles, Check } from 'lucide-react-native';
 
 const ACTIVITY_MULTIPLIERS = {
   sedentary: { label: 'Sedentary (Office job)', value: 1.2 },

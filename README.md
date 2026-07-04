@@ -33,12 +33,6 @@ For running on **iOS Simulator** or **Android Emulator**:
 
 ---
 
-## Installation
-
-```bash
-# 1. Clone or navigate to the project
-cd WorkoutLogRN
-
 # 2. Install all dependencies
 npm install
 ```

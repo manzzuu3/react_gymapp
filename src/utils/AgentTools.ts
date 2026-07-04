@@ -1,10 +1,9 @@
 import { WorkoutStore } from '../database/WorkoutStore';
 import { NutritionStore } from '../database/NutritionStore';
-import { BodyweightStore } from '../database/BodyweightStore';
 import { searchGenericFoods } from '../database/FoodDatabase';
 import { WorkoutScheduler } from './WorkoutScheduler';
 import { DateHelpers } from './DateHelpers';
-import { FoodEntry, ExerciseEntry, Workout, Meal, Product, Exercise, WorkoutDay } from '../database/types';
+import { WorkoutDay } from '../database/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // In-memory undo stack for the current assistant session

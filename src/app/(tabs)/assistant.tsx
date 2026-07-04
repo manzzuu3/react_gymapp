@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   View, Text, FlatList, TextInput, TouchableOpacity, 
   KeyboardAvoidingView, Platform, useColorScheme, ActivityIndicator, Alert 
 } from 'react-native';
-import { useApp } from '../../context/AppContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChatTurnStore } from '../../database/ChatTurnStore';
 import { executeAgentTool } from '../../utils/AgentTools';
 import { ChatTurn } from '../../database/types';
-import { Send, Mic, Trash2, ShieldAlert, MessageSquare } from 'lucide-react-native';
+import { Send, Mic, Trash2, MessageSquare } from 'lucide-react-native';
 import { useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function AssistantScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
-  const { dbReady } = useApp();
+  const insets = useSafeAreaInsets();
 
   const [messages, setMessages] = useState<ChatTurn[]>([]);
   const [inputText, setInputText] = useState('');
@@ -262,7 +262,10 @@ To connect me to a cloud brain, enter your API key in Settings (Profile tab).`;
       )}
 
       {/* Input Bar */}
-      <View className={`p-4 border-t flex-row items-center gap-3 ${isDark ? 'bg-brand-card-dark border-brand-border-dark' : 'bg-white border-brand-border-light'}`}>
+      <View 
+        style={{ paddingBottom: Platform.OS === 'ios' ? insets.bottom + 72 : 80 }}
+        className={`p-4 border-t flex-row items-center gap-3 ${isDark ? 'bg-brand-card-dark border-brand-border-dark' : 'bg-white border-brand-border-light'}`}
+      >
         <TouchableOpacity 
           onPress={startRecordingMock}
           className={`w-11 h-11 rounded-full items-center justify-center ${isDark ? 'bg-brand-inputBg-dark' : 'bg-brand-inputBg-light'}`}

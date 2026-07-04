@@ -5,11 +5,10 @@ import {
 } from 'react-native';
 import { WorkoutStore } from '../database/WorkoutStore';
 import { WorkoutScheduler } from '../utils/WorkoutScheduler';
-import { Workout, TemplateExercise, Exercise, TrainingPlan, WorkoutDay } from '../database/types';
+import { Workout, Exercise, TrainingPlan, WorkoutDay } from '../database/types';
 import { router, useLocalSearchParams } from 'expo-router';
 import { 
-  X, Plus, Trash2, Calendar, Link, Play, Save, 
-  ChevronRight, Dumbbell, AlignLeft, Info 
+  X, Plus, Trash2, Calendar, Save
 } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { DateHelpers } from '../utils/DateHelpers';
@@ -92,6 +91,7 @@ export default function WorkoutDetailScreen() {
 
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workoutId, dateStr]);
 
   // Target input updates

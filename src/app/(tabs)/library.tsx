@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   View, Text, FlatList, TextInput, TouchableOpacity, 
   Alert, useColorScheme, KeyboardAvoidingView, Platform 
@@ -124,7 +124,7 @@ export default function LibraryScreen() {
       <FlatList
         data={filteredExercises}
         keyExtractor={item => item.id}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 40, gap: 10 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 100, gap: 10 }}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => router.push({ pathname: '/exercise-detail', params: { exerciseId: item.id } })}

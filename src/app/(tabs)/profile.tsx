@@ -5,9 +5,9 @@ import {
 } from 'react-native';
 import { useApp } from '../../context/AppContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { 
-  Settings, User, Key, Database, RefreshCw, 
+  User, Key, Database, RefreshCw, 
   ChevronRight, Scale, Activity, FileText 
 } from 'lucide-react-native';
 
@@ -149,7 +149,7 @@ export default function ProfileScreen() {
 
     <ScrollView 
       className={`flex-1 ${isDark ? 'bg-brand-background-dark' : 'bg-brand-background-light'}`}
-      contentContainerStyle={{ paddingBottom: 40 }}
+      contentContainerStyle={{ paddingBottom: 100 }}
     >
       <View className="px-4 py-4 gap-4">
         

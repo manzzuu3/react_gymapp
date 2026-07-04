@@ -1,6 +1,6 @@
 import { WorkoutStore } from '../database/WorkoutStore';
 import { getDb } from '../database/db';
-import { TrainingPlan, Workout, WorkoutDay, SkipEvent, ExerciseEntry, SetEntry } from '../database/types';
+import { TrainingPlan, Workout, WorkoutDay } from '../database/types';
 import { DateHelpers } from './DateHelpers';
 
 export interface Slot {

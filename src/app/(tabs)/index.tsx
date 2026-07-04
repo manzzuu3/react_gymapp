@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { 
   View, Text, ScrollView, TouchableOpacity, TextInput, 
-  Alert, KeyboardAvoidingView, Platform, useColorScheme 
+  Alert, useColorScheme 
 } from 'react-native';
 import { useApp } from '../../context/AppContext';
-import { NutritionStore, getProductMacros } from '../../database/NutritionStore';
+import { NutritionStore } from '../../database/NutritionStore';
 import { BodyweightStore } from '../../database/BodyweightStore';
 import { WorkoutStore } from '../../database/WorkoutStore';
 import { WorkoutScheduler } from '../../utils/WorkoutScheduler';
 import { FoodEntry, WorkoutDay, BodyweightEntry } from '../../database/types';
 import { DateHelpers } from '../../utils/DateHelpers';
 import { router, useFocusEffect } from 'expo-router';
+import { Haptics } from '../../utils/Haptics';
 import { 
-  Apple, Dumbbell, Activity, Plus, Trash2, Edit3, 
+  Apple, Dumbbell, Plus, Trash2, 
   ChevronRight, Calendar, Scale, ChevronLeft 
 } from 'lucide-react-native';
 
@@ -59,11 +60,13 @@ export default function TodayScreen() {
   useFocusEffect(
     React.useCallback(() => {
       loadData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [todayStr, weightUnit])
   );
 
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todayStr]);
 
   // Handle weight submit
@@ -112,11 +115,11 @@ export default function TodayScreen() {
   return (
     <ScrollView 
       className={`flex-1 ${isDark ? 'bg-brand-background-dark' : 'bg-brand-background-light'}`}
-      contentContainerStyle={{ paddingBottom: 40 }}
+      contentContainerStyle={{ paddingBottom: 100 }}
     >
       {/* Date Bar */}
       <View className={`flex-row justify-between items-center px-4 py-3 border-b ${isDark ? 'bg-brand-card-dark border-brand-border-dark' : 'bg-brand-card-light border-brand-border-light'}`}>
-        <TouchableOpacity onPress={() => changeDate(-1)} className="p-2">
+        <TouchableOpacity onPress={() => { Haptics.light(); changeDate(-1); }} className="p-2">
           <ChevronLeft color={isDark ? '#FFFFFF' : '#1A1A1A'} size={24} />
         </TouchableOpacity>
         
@@ -129,7 +132,7 @@ export default function TodayScreen() {
           </Text>
         </View>
 
-        <TouchableOpacity onPress={() => changeDate(1)} className="p-2">
+        <TouchableOpacity onPress={() => { Haptics.light(); changeDate(1); }} className="p-2">
           <ChevronRight color={isDark ? '#FFFFFF' : '#1A1A1A'} size={24} />
         </TouchableOpacity>
       </View>
@@ -137,7 +140,7 @@ export default function TodayScreen() {
       {/* active workout status bar */}
       {activeWorkoutDay && (
         <TouchableOpacity 
-          onPress={() => router.push('/active-workout')}
+          onPress={() => { Haptics.medium(); router.push('/active-workout'); }}
           className="mx-4 mt-4 bg-brand-accent-light p-4 rounded-2xl flex-row justify-between items-center shadow-lg"
         >
           <View className="flex-row items-center gap-3">
@@ -173,6 +176,7 @@ export default function TodayScreen() {
               </Text>
               <TouchableOpacity 
                 onPress={async () => {
+                  Haptics.success();
                   await WorkoutScheduler.unskip(workoutDay);
                   loadData();
                 }}
@@ -205,11 +209,10 @@ export default function TodayScreen() {
                 <Text className={`text-xs mt-2 text-center ${isDark ? 'text-white/60' : 'text-brand-secondaryText-light'}`}>
                   + {workoutDay.entries.length - 3} more exercises
                 </Text>
-              )}
-
-              {/* Start/Resume button */}
+              )}              {/* Start/Resume button */}
               <TouchableOpacity
                 onPress={() => {
+                  Haptics.medium();
                   startWorkout(workoutDay);
                   router.push('/active-workout');
                 }}
@@ -223,11 +226,11 @@ export default function TodayScreen() {
             </View>
           ) : (
             <View className="py-4 items-center">
-              <Text className={`text-center mb-4 ${isDark ? 'text-white/60' : 'text-brand-secondaryText-light'}`}>
+              <Text className={`text-center mb-4 ${isDark ? 'text-white/40' : 'text-brand-secondaryText-light'}`}>
                 No workouts logged or scheduled for today.
               </Text>
               <TouchableOpacity 
-                onPress={() => router.push('/workouts')}
+                onPress={() => { Haptics.light(); router.push('/workouts'); }}
                 className="bg-brand-accent-light/10 border border-brand-accent-light/30 px-6 py-2.5 rounded-2xl"
               >
                 <Text className="text-brand-accent-light font-bold text-sm">Schedule a Template</Text>
@@ -245,7 +248,7 @@ export default function TodayScreen() {
             <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-brand-primaryText-light'}`}>Nutrition Progress</Text>
           </View>
           <TouchableOpacity 
-            onPress={() => router.push({ pathname: '/(tabs)/profile', params: { autoOpenNutritionPicker: 'true' } })}
+            onPress={() => { Haptics.light(); router.push({ pathname: '/(tabs)/profile', params: { autoOpenNutritionPicker: 'true' } }); }}
             className="p-1"
           >
             <Plus color={isDark ? '#0A84FF' : '#007AFF'} size={24} />
@@ -299,7 +302,7 @@ export default function TodayScreen() {
                     {Math.round(f.grams)}g • {Math.round(f.kcal)} kcal • {f.proteinG.toFixed(1)}g protein
                   </Text>
                 </View>
-                <TouchableOpacity onPress={() => handleDeleteFood(f.id)} className="p-1">
+                <TouchableOpacity onPress={() => { Haptics.warning(); handleDeleteFood(f.id); }} className="p-1">
                   <Trash2 color={isDark ? '#FF453A' : '#FF3B30'} size={18} />
                 </TouchableOpacity>
               </View>
@@ -320,7 +323,7 @@ export default function TodayScreen() {
             <Text className={`text-xl font-bold ${isDark ? 'text-white' : 'text-brand-primaryText-light'}`}>Bodyweight</Text>
           </View>
           <TouchableOpacity 
-            onPress={() => setShowWeightInput(!showWeightInput)}
+            onPress={() => { Haptics.light(); setShowWeightInput(!showWeightInput); }}
             className="bg-brand-accent-light/10 px-4 py-1.5 rounded-xl"
           >
             <Text className="text-brand-accent-light font-bold text-sm">
@@ -361,7 +364,7 @@ export default function TodayScreen() {
               autoFocus
             />
             <TouchableOpacity 
-              onPress={handleWeightSubmit}
+              onPress={() => { Haptics.success(); handleWeightSubmit(); }}
               className="bg-brand-accent-light px-5 py-3.5 rounded-xl shadow-sm"
             >
               <Text className="text-white font-bold">Save</Text>

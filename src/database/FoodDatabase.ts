@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import * as FileSystem from 'expo-file-system';
+import { File, Directory, Paths } from 'expo-file-system';
 import { Asset } from 'expo-asset';
 import { Platform } from 'react-native';
 
@@ -27,16 +27,14 @@ export async function initFoodCatalog(): Promise<SQLite.SQLiteDatabase> {
     return foodDbInstance;
   }
 
-  const dbDir = `${(FileSystem as any).documentDirectory}SQLite/`;
-  const dbPath = `${dbDir}${dbName}`;
+  const dbDir = new Directory(Paths.document, 'SQLite');
+  const dbFile = new File(dbDir, dbName);
 
-  const dirInfo = await FileSystem.getInfoAsync(dbDir);
-  if (!dirInfo.exists) {
-    await FileSystem.makeDirectoryAsync(dbDir, { intermediates: true });
+  if (!dbDir.exists) {
+    dbDir.create({ intermediates: true });
   }
 
-  const dbInfo = await FileSystem.getInfoAsync(dbPath);
-  if (!dbInfo.exists) {
+  if (!dbFile.exists) {
     console.log('Copying foods.sqlite to document directory...');
     try {
       const asset = Asset.fromModule(require('../../assets/foods.sqlite'));
@@ -44,10 +42,8 @@ export async function initFoodCatalog(): Promise<SQLite.SQLiteDatabase> {
       if (!asset.localUri) {
         throw new Error('Failed to load foods.sqlite asset localUri');
       }
-      await FileSystem.copyAsync({
-        from: asset.localUri,
-        to: dbPath,
-      });
+      const srcFile = new File(asset.localUri);
+      srcFile.copy(dbFile);
       console.log('foods.sqlite copy complete.');
     } catch (err) {
       console.error('Error copying foods.sqlite', err);

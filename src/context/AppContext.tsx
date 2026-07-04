@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { WorkoutDay } from '../database/types';
 import { WorkoutScheduler } from '../utils/WorkoutScheduler';
-import { getDb, initDb } from '../database/db';
+import { initDb } from '../database/db';
 import { initFoodCatalog } from '../database/FoodDatabase';
 
 interface AppContextProps {

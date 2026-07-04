@@ -6,15 +6,45 @@ import {
 import { WorkoutStore } from '../database/WorkoutStore';
 import { BodyweightStore } from '../database/BodyweightStore';
 import { WorkoutStats, TrendPoint, BodyweightSeries } from '../utils/WorkoutStats';
-import { Exercise, WorkoutDay, ExerciseEntry, SetEntry } from '../database/types';
+import { Exercise, WorkoutDay, ExerciseEntry } from '../database/types';
 import { router, useLocalSearchParams } from 'expo-router';
 import { 
-  X, Dumbbell, Award, Calendar, Trash2, 
+  X, Award, Calendar, Trash2, 
   TrendingUp, Activity, HelpCircle 
 } from 'lucide-react-native';
 import Svg, { Path, Circle, Line } from 'react-native-svg';
 import { useApp } from '../context/AppContext';
 import { DateHelpers } from '../utils/DateHelpers';
+import { cssInterop } from 'react-native-css-interop';
+
+cssInterop(Svg, { className: 'style' });
+cssInterop(Path, {
+  className: {
+    target: 'style',
+    nativeStyleToProp: {
+      fill: true,
+      stroke: true,
+    },
+  } as any
+});
+cssInterop(Circle, {
+  className: {
+    target: 'style',
+    nativeStyleToProp: {
+      fill: true,
+      stroke: true,
+    },
+  } as any
+});
+cssInterop(Line, {
+  className: {
+    target: 'style',
+    nativeStyleToProp: {
+      fill: true,
+      stroke: true,
+    },
+  } as any
+});
 
 export default function ExerciseDetailScreen() {
   const colorScheme = useColorScheme();
@@ -75,6 +105,7 @@ export default function ExerciseDetailScreen() {
 
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exerciseId, weightUnit]);
 
   // Handle delete if custom

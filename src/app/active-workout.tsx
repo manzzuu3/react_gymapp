@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, Text, ScrollView, TouchableOpacity, TextInput, 
   Alert, useColorScheme, KeyboardAvoidingView, Platform 
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useApp } from '../context/AppContext';
 import { WorkoutStore } from '../database/WorkoutStore';
-import { WorkoutDay, ExerciseEntry, SetEntry } from '../database/types';
+import { WorkoutDay } from '../database/types';
 import { router } from 'expo-router';
+import { Haptics } from '../utils/Haptics';
 import { 
-  X, Check, RotateCcw, AlertTriangle, Scale, 
-  Plus, Trash2, ArrowLeft, ArrowRight, Clock, PlusCircle 
+  X, Check, Trash2, ArrowLeft, ArrowRight, Clock, PlusCircle 
 } from 'lucide-react-native';
-import { DateHelpers } from '../utils/DateHelpers';
 
 export default function ActiveWorkoutScreen() {
   const colorScheme = useColorScheme();
@@ -40,6 +40,7 @@ export default function ActiveWorkoutScreen() {
 
   useEffect(() => {
     loadActiveDayData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeWorkoutDay]);
 
   // Elapsed Timer ticker
@@ -75,6 +76,7 @@ export default function ActiveWorkoutScreen() {
     if (field === 'isDone') {
       const isDone = val as boolean;
       set.isDone = isDone;
+      Haptics.light();
       // Auto-fill from target values if not logged yet
       if (isDone) {
         if (set.weightKg === undefined || set.weightKg === null) {
@@ -148,15 +150,17 @@ export default function ActiveWorkoutScreen() {
 
   // Discard workout
   const handleDiscard = () => {
+    Haptics.warning();
     Alert.alert(
       'Discard Session?',
       'Are you sure you want to discard this workout? Active progress will not be saved.',
       [
-        { text: 'Resume', style: 'cancel' },
+        { text: 'Resume', style: 'cancel', onPress: () => Haptics.light() },
         { 
           text: 'Discard', 
           style: 'destructive',
           onPress: () => {
+            Haptics.error();
             cancelWorkout();
             router.replace('/(tabs)');
           }
@@ -172,6 +176,7 @@ export default function ActiveWorkoutScreen() {
     const doneSets = totalSets.filter(s => s.isDone).length;
 
     if (doneSets === 0) {
+      Haptics.error();
       Alert.alert('No completed sets', 'Log at least one set as completed before finishing.');
       return;
     }
@@ -185,6 +190,7 @@ export default function ActiveWorkoutScreen() {
     await WorkoutStore.updateWorkoutDay(finalDay);
     
     await finishWorkout(activeWorkoutDay!.startedAt!, finishedAt);
+    Haptics.success();
     Alert.alert('Workout Finished!', `Congratulations! Logged ${doneSets} working sets.`);
     router.replace('/(tabs)');
   };
@@ -233,13 +239,13 @@ export default function ActiveWorkoutScreen() {
           </View>
           <View className="flex-row gap-2">
             <TouchableOpacity 
-              onPress={() => adjustTimer(15)}
+              onPress={() => { Haptics.light(); adjustTimer(15); }}
               className="bg-white/20 px-3 py-1.5 rounded-lg"
             >
               <Text className="text-white font-bold text-[10px]">+15s</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              onPress={() => adjustTimer(-15)}
+              onPress={() => { Haptics.light(); adjustTimer(-15); }}
               className="bg-white/20 px-3 py-1.5 rounded-lg"
             >
               <Text className="text-white font-bold text-[10px]">-15s</Text>
@@ -393,4 +399,3 @@ export default function ActiveWorkoutScreen() {
     </KeyboardAvoidingView>
   );
 }
-import AsyncStorage from '@react-native-async-storage/async-storage';

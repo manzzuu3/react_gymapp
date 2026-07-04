@@ -1,6 +1,9 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { useColorScheme, Platform, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BlurView } from 'expo-blur';
+import { Haptics } from '../../utils/Haptics';
 import { 
   Calendar as CalendarIcon, 
   Dumbbell, 
@@ -13,6 +16,7 @@ import {
 export default function TabsLayout() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const insets = useSafeAreaInsets();
 
   // Theme colors
   const activeColor = isDark ? '#0A84FF' : '#007AFF';
@@ -36,17 +40,47 @@ export default function TabsLayout() {
         tabBarActiveTintColor: activeColor,
         tabBarInactiveTintColor: inactiveColor,
         tabBarStyle: {
-          backgroundColor: tabBgColor,
-          borderTopWidth: 1,
-          borderTopColor: borderCol,
-          paddingTop: 5,
-          height: 60,
+          position: 'absolute',
+          bottom: Platform.OS === 'ios' ? insets.bottom + 8 : 12,
+          left: 24,
+          right: 24,
+          height: 64,
+          borderRadius: 24,
+          borderTopWidth: 0,
+          borderWidth: 1,
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+          backgroundColor: Platform.OS === 'ios' ? 'transparent' : (isDark ? '#1C1C1E' : '#FFFFFF'),
+          elevation: 6,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: isDark ? 0.35 : 0.08,
+          shadowRadius: 12,
+          paddingTop: 8,
           paddingBottom: 8,
+          overflow: 'hidden',
+        },
+        tabBarBackground: Platform.OS === 'ios' ? () => (
+          <BlurView
+            intensity={80}
+            tint={isDark ? 'dark' : 'light'}
+            style={StyleSheet.absoluteFill}
+          />
+        ) : undefined,
+        tabBarLabelStyle: {
+          fontSize: 10,
+          fontWeight: '600',
+          marginBottom: 2,
+        },
+        tabBarIconStyle: {
+          marginTop: 2,
         },
       }}
     >
       <Tabs.Screen
         name="index"
+        listeners={{
+          tabPress: () => Haptics.light(),
+        }}
         options={{
           title: 'Today',
           tabBarLabel: 'Today',
@@ -56,6 +90,9 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="workouts"
+        listeners={{
+          tabPress: () => Haptics.light(),
+        }}
         options={{
           title: 'Workouts',
           tabBarLabel: 'Workouts',
@@ -65,6 +102,9 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="calendar"
+        listeners={{
+          tabPress: () => Haptics.light(),
+        }}
         options={{
           title: 'Calendar',
           tabBarLabel: 'Calendar',
@@ -74,6 +114,9 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="library"
+        listeners={{
+          tabPress: () => Haptics.light(),
+        }}
         options={{
           title: 'Library',
           tabBarLabel: 'Library',
@@ -83,6 +126,9 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="assistant"
+        listeners={{
+          tabPress: () => Haptics.light(),
+        }}
         options={{
           title: 'Assistant',
           tabBarLabel: 'Assistant',
@@ -92,6 +138,9 @@ export default function TabsLayout() {
       />
       <Tabs.Screen
         name="profile"
+        listeners={{
+          tabPress: () => Haptics.light(),
+        }}
         options={{
           title: 'Settings',
           tabBarLabel: 'Settings',

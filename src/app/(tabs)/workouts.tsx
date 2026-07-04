@@ -1,21 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  View, Text, ScrollView, TouchableOpacity, Alert, 
-  Dimensions, useColorScheme, FlatList 
+  View, Text, ScrollView, TouchableOpacity, 
+  Dimensions, useColorScheme 
 } from 'react-native';
 import { useApp } from '../../context/AppContext';
 import { WorkoutStore } from '../../database/WorkoutStore';
 import { BodyweightStore } from '../../database/BodyweightStore';
-import { WorkoutStats, WeekStat, MuscleVolume, MuscleWeeklyVolume, PersonalRecord, TrendPoint, BodyweightSeries } from '../../utils/WorkoutStats';
+import { WorkoutStats, WeekStat, MuscleVolume, PersonalRecord, TrendPoint, BodyweightSeries } from '../../utils/WorkoutStats';
 import { StrengthScore } from '../../utils/StrengthScore';
-import { WorkoutDay, Workout, TrainingPlan } from '../../database/types';
+import { WorkoutDay, Workout } from '../../database/types';
 import { router, useFocusEffect } from 'expo-router';
 import { 
-  Plus, Calendar, Award, ChevronRight, BarChart2, 
-  Settings, Clock, Sparkles, Flame, Percent, Dumbbell 
+  Plus, Calendar, Award, ChevronRight, 
+  Flame, Dumbbell 
 } from 'lucide-react-native';
-import Svg, { Path, Circle, Rect, Line, Text as SvgText } from 'react-native-svg';
+import Svg, { Path, Circle, Line } from 'react-native-svg';
 import { DateHelpers } from '../../utils/DateHelpers';
+import { cssInterop } from 'react-native-css-interop';
+
+cssInterop(Svg, { className: 'style' });
+cssInterop(Path, {
+  className: {
+    target: 'style',
+    nativeStyleToProp: {
+      fill: true,
+      stroke: true,
+    },
+  } as any
+});
+cssInterop(Circle, {
+  className: {
+    target: 'style',
+    nativeStyleToProp: {
+      fill: true,
+      stroke: true,
+    },
+  } as any
+});
+cssInterop(Line, {
+  className: {
+    target: 'style',
+    nativeStyleToProp: {
+      fill: true,
+      stroke: true,
+    },
+  } as any
+});
 
 export default function WorkoutsScreen() {
   const colorScheme = useColorScheme();
@@ -31,7 +61,6 @@ export default function WorkoutsScreen() {
   const [weeklyVol, setWeeklyVol] = useState<WeekStat[]>([]);
   const [consistency, setConsistency] = useState<any>(null);
   const [muscleSplit, setMuscleSplit] = useState<MuscleVolume[]>([]);
-  const [weeklyMuscleVol, setWeeklyMuscleVol] = useState<MuscleWeeklyVolume[]>([]);
   const [records, setRecords] = useState<PersonalRecord[]>([]);
   const [selectedLift, setSelectedLift] = useState<string>('');
   const [liftTrend, setLiftTrend] = useState<TrendPoint[]>([]);
@@ -69,9 +98,6 @@ export default function WorkoutsScreen() {
       const split = WorkoutStats.muscleBreakdown(daysWithEntries);
       setMuscleSplit(split);
 
-      const weeklyMuscle = WorkoutStats.weeklyMuscleVolume(daysWithEntries);
-      setWeeklyMuscleVol(weeklyMuscle);
-
       const prs = WorkoutStats.personalRecords(daysWithEntries, bwSeries);
       setRecords(prs);
 
@@ -106,6 +132,7 @@ export default function WorkoutsScreen() {
   useFocusEffect(
     React.useCallback(() => {
       loadData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedLift, weightUnit])
   );
 
@@ -220,7 +247,7 @@ export default function WorkoutsScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }} className="flex-1 mt-2">
+      <ScrollView contentContainerStyle={{ paddingBottom: 100 }} className="flex-1 mt-2">
         {activeTab === 'templates' ? (
           // TEMPLATES VIEW
           <View className="px-4 gap-4">

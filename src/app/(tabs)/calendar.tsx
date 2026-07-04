@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  View, Text, ScrollView, TouchableOpacity, useColorScheme 
+  View, Text, TouchableOpacity, useColorScheme, Platform 
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../../context/AppContext';
 import { WorkoutStore } from '../../database/WorkoutStore';
 import { DateHelpers } from '../../utils/DateHelpers';
@@ -12,6 +13,7 @@ import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Edit2, Play } from
 export default function CalendarScreen() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const insets = useSafeAreaInsets();
   const { weekStartsMonday } = useApp();
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -57,6 +59,7 @@ export default function CalendarScreen() {
   useFocusEffect(
     React.useCallback(() => {
       loadCalendarData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedDate, weekStartsMonday])
   );
 
@@ -76,7 +79,10 @@ export default function CalendarScreen() {
   const weekdaySymbols = DateHelpers.weekdayHeaderSymbols(weekStartsMonday);
 
   return (
-    <View className={`flex-1 ${isDark ? 'bg-brand-background-dark' : 'bg-brand-background-light'}`}>
+    <View 
+      style={{ paddingBottom: Platform.OS === 'ios' ? insets.bottom + 72 : 80 }}
+      className={`flex-1 ${isDark ? 'bg-brand-background-dark' : 'bg-brand-background-light'}`}
+    >
       
       {/* Calendar View Mode Segmented Picker */}
       <View className={`flex-row p-1 mx-4 mt-4 rounded-xl ${isDark ? 'bg-brand-card-dark' : 'bg-brand-inputBg-light'}`}>
