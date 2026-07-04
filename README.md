@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # WorkoutLog RN 🏋️
 
 A React Native / Expo port of the WorkoutLog iOS app. Tracks workouts, nutrition, bodyweight, and includes an AI fitness assistant — all powered by local SQLite with no cloud dependency.
@@ -119,3 +120,6 @@ WorkoutLogRN/
 - **No internet required** — all data is stored locally on-device via SQLite
 - **Weight storage** — always stored in kg internally; converted to lbs in the UI if selected
 - The `.expo/` folder is gitignored and auto-generated on first `expo start`
+=======
+# react_gymapp
+>>>>>>> origin/main
