@@ -1,36 +1,17 @@
-<<<<<<< HEAD
 # WorkoutLog RN 🏋️
 
-A React Native / Expo port of the WorkoutLog iOS app. Tracks workouts, nutrition, bodyweight, and includes an AI fitness assistant — all powered by local SQLite with no cloud dependency.
+A React Native  WorkoutLog app. Tracks workouts, nutrition, bodyweight, and includes an AI fitness assistant in Sqlite.
 
 ---
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Framework | [Expo](https://expo.dev) (SDK 57) with [Expo Router](https://expo.github.io/router) |
-| Language | TypeScript |
-| Styling | [NativeWind v4](https://nativewind.dev) (Tailwind CSS for React Native) |
-| Database | [expo-sqlite](https://docs.expo.dev/versions/latest/sdk/sqlite/) (local, on-device) |
-| State | React Context + AsyncStorage |
-| Icons | [lucide-react-native](https://lucide.dev) |
-
----
-
 ## Prerequisites
 
 Make sure you have the following installed before starting:
 
 - **Node.js** v18 or later — [nodejs.org](https://nodejs.org)
 - **npm** v9 or later (comes with Node)
-- **Expo Go** app on your phone (optional, for physical device testing)
+- **Expo Go** Install app on your phone from google play store or app store
   - [iOS App Store](https://apps.apple.com/app/expo-go/id982107779)
   - [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
-
-For running on **iOS Simulator** or **Android Emulator**:
-- macOS + Xcode 15+ (iOS Simulator)
-- Android Studio with an AVD configured (Android Emulator)
 
 ---
 
@@ -52,18 +33,9 @@ Once Metro starts, press one of the following keys in the terminal:
 
 | Key | Action |
 |-----|--------|
-| `i` | Open in **iOS Simulator** (macOS only) |
-| `a` | Open in **Android Emulator** |
 | `w` | Open in **Web Browser** (localhost:8081) |
 | Scan QR | Open in **Expo Go** on your physical device |
 
-### Platform-specific shortcuts
-
-```bash
-npm run ios        # Launch iOS Simulator directly
-npm run android    # Launch Android Emulator directly
-npm run web        # Launch in browser directly
-```
 
 ### Reset Metro cache (if you see stale bundle errors)
 
@@ -114,12 +86,3 @@ WorkoutLogRN/
 - ⚙️ **Settings** — KG/LB unit toggle, calorie/protein goals, week start day
 
 ---
-
-## Notes
-
-- **No internet required** — all data is stored locally on-device via SQLite
-- **Weight storage** — always stored in kg internally; converted to lbs in the UI if selected
-- The `.expo/` folder is gitignored and auto-generated on first `expo start`
-=======
-# react_gymapp
->>>>>>> origin/main
